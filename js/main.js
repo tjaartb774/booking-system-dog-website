@@ -31,7 +31,8 @@
     info: st('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),
     user: st('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'),
     send: st('<path d="m3 11 18-8-8 18-2-8z"/>'),
-    sparkle: st('<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/><circle cx="12" cy="12" r="2.5"/>')
+    bone: '<svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><circle cx="14" cy="22" r="9"/><circle cx="14" cy="42" r="9"/><circle cx="50" cy="22" r="9"/><circle cx="50" cy="42" r="9"/><rect x="12" y="24" width="40" height="16" rx="8"/></svg>',
+    heartfill: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-4.6-9.3-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.3 6C19 16.4 12 21 12 21z"/></svg>'
   };
   D.icons = ICONS;
   $$('[data-icon]').forEach(el => { el.innerHTML = ICONS[el.dataset.icon] || PAW; });

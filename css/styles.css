@@ -365,3 +365,12 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
   .reveal { opacity: 1; transform: none; }
   .hero-logo { animation: none; }
 }
+
+/* Inline icons for the pills and approach cards */
+.ico { display: inline-flex; align-items: center; justify-content: center; width: 1.1em; height: 1.1em; vertical-align: -.15em; color: var(--purple); flex: none; }
+.ico svg { width: 100%; height: 100%; }
+.pill .ico { margin-right: .45rem; }
+.ring-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--lavender-light); color: var(--purple); display: grid; place-items: center; margin: 0 auto .9rem; transition: transform .3s, background .3s, color .3s; }
+.ring-icon svg { width: 34px; height: 34px; }
+.flip-front .big { font-size: inherit; margin-bottom: .9rem; }
+.flip:hover .ring-icon { background: var(--purple); color: #fff; transform: scale(1.06) rotate(-6deg); }

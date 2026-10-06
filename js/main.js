@@ -30,7 +30,8 @@
     calendar: st('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
     info: st('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),
     user: st('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'),
-    send: st('<path d="m3 11 18-8-8 18-2-8z"/>')
+    send: st('<path d="m3 11 18-8-8 18-2-8z"/>'),
+    sparkle: st('<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/><circle cx="12" cy="12" r="2.5"/>')
   };
   D.icons = ICONS;
   $$('[data-icon]').forEach(el => { el.innerHTML = ICONS[el.dataset.icon] || PAW; });

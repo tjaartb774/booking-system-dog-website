@@ -128,6 +128,9 @@ p { margin: 0 0 1em; }
   100% { transform: translateY(-110vh) rotate(25deg) scale(1.1); opacity: 0; }
 }
 .hero-grid { display: grid; gap: 2.5rem; align-items: center; position: relative; }
+.hero-dog { width: min(84vw, 400px); height: min(92vw, 440px); margin: 0 auto; position: relative; cursor: pointer; touch-action: pan-y; }
+.hero-dog canvas { display: block; width: 100% !important; height: 100% !important; }
+.hero-dog img { width: 80%; margin: 0 auto; border-radius: 50%; }
 .hero-logo { width: min(68vw, 320px); margin: 0 auto; filter: drop-shadow(0 20px 40px rgba(70,33,111,.22)); animation: bob 5s ease-in-out infinite; cursor: pointer; user-select: none; -webkit-user-select: none; }
 .hero-logo.wiggle { animation: wiggle .5s ease-in-out; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }

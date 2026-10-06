@@ -4,7 +4,7 @@ A fun, interactive site for Beyond the Leash, a force-free dog grooming and trai
 
 ## What is on the site
 
-- `index.html` - home page: hero with floating paws and a paw-print cursor trail, flip cards for the Force-Free / Fun / Trust approach, services (quote on request), the Groom Finder quiz, natural products strip, pre-visit checklist, community links, booking wizard and contact details.
+- `index.html` - home page: hero with a 3D sitting dog whose head follows the pointer (built with Three.js in `js/dog.js`, library vendored at `assets/vendor/three.min.js`), floating paws and a paw-print cursor trail, flip cards for the Force-Free / Fun / Trust approach, services (quote on request), the Groom Finder quiz, natural products strip, pre-visit checklist, community links, booking wizard and contact details.
 - `terms.html` - the full Booking Policy and Terms as an accordion.
 - `js/data.js` - **the one file to edit** for contact details, social links, services, quiz rules and checklist items.
 - `js/main.js`, `js/quiz.js`, `js/booking.js` - behaviour.
@@ -22,7 +22,7 @@ The booking wizard collects the dog's details, service, preferred date, behaviou
 3. **Service area** - `business.serviceArea` currently says "Stilbaai, Riversdale and surrounds".
 4. **Natural products strip** - the five badges on the home page mirror the ones on the Facebook cover. Delete the `#natural` section in `index.html` if you do not want it.
 
-Hidden fun: pat the logo in the hero five times.
+Hidden fun: pat the dog in the hero five times.
 
 ## Run locally
 

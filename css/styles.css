@@ -374,8 +374,8 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
 .shape { position: relative; width: 96px; height: 96px; display: grid; place-items: center; color: var(--purple); margin: 0 auto; }
 .shape::before { content: ''; position: absolute; inset: 6px; border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%; background: var(--lavender-light); transition: transform .4s; }
 .shape svg { position: relative; width: 52px; height: 52px; filter: drop-shadow(0 6px 10px rgba(70,33,111,.18)); transition: transform .4s; }
-.shape-paw svg { transform: rotate(-14deg); }
-.shape-bone svg { transform: rotate(-30deg); }
-.shape-heart svg { transform: rotate(8deg); }
+.shape-hand svg { transform: rotate(-8deg); }
+.shape-ball svg { transform: rotate(-20deg); }
+.shape-heart svg { transform: rotate(6deg); }
 .flip:hover .shape::before { transform: rotate(25deg) scale(1.08); }
 .flip:hover .shape svg { transform: rotate(0) scale(1.08); }

@@ -31,8 +31,9 @@
     info: st('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),
     user: st('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'),
     send: st('<path d="m3 11 18-8-8 18-2-8z"/>'),
-    bone: '<svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><circle cx="14" cy="22" r="9"/><circle cx="14" cy="42" r="9"/><circle cx="50" cy="22" r="9"/><circle cx="50" cy="42" r="9"/><rect x="12" y="24" width="40" height="16" rx="8"/></svg>',
-    heartfill: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-4.6-9.3-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.3 6C19 16.4 12 21 12 21z"/></svg>'
+    hand: '<svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><rect x="18" y="12" width="7.5" height="30" rx="3.75"/><rect x="27.5" y="6" width="7.5" height="36" rx="3.75"/><rect x="37" y="9" width="7.5" height="33" rx="3.75"/><rect x="46" y="17" width="6.5" height="26" rx="3.25"/><rect x="18" y="30" width="34.5" height="27" rx="11"/><rect x="5" y="27" width="8" height="22" rx="4" transform="rotate(-32 9 38)"/></svg>',
+    ball: '<svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><circle cx="32" cy="32" r="25"/><path d="M14 13c11 9 11 29 0 38M50 13c-11 9-11 29 0 38" fill="none" stroke="#EDE6F6" stroke-width="4" stroke-linecap="round"/></svg>',
+    heartpaw: '<svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><g transform="translate(1 2) scale(2.6)"><path d="M12 21s-7-4.6-9.3-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.3 6C19 16.4 12 21 12 21z"/></g><g fill="#EDE6F6" transform="translate(19.4 19.4) scale(.4)"><ellipse cx="20" cy="22" rx="6" ry="8" transform="rotate(-20 20 22)"/><ellipse cx="44" cy="22" rx="6" ry="8" transform="rotate(20 44 22)"/><ellipse cx="11" cy="34" rx="5" ry="6.5" transform="rotate(-40 11 34)"/><ellipse cx="53" cy="34" rx="5" ry="6.5" transform="rotate(40 53 34)"/><path d="M32 30c-9 0-16 8-16 15 0 5 4 8 8 8 3 0 5-1 8-1s5 1 8 1c4 0 8-3 8-8 0-7-7-15-16-15z"/></g></svg>',
   };
   D.icons = ICONS;
   $$('[data-icon]').forEach(el => { el.innerHTML = ICONS[el.dataset.icon] || PAW; });

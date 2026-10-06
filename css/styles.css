@@ -128,11 +128,6 @@ p { margin: 0 0 1em; }
   100% { transform: translateY(-110vh) rotate(25deg) scale(1.1); opacity: 0; }
 }
 .hero-grid { display: grid; gap: 2.5rem; align-items: center; position: relative; }
-.hero-dog { width: min(84vw, 400px); height: min(92vw, 440px); margin: 0 auto; position: relative; cursor: pointer; touch-action: pan-y; }
-.hero-dog canvas { display: block; width: 100% !important; height: 100% !important; }
-.hero-dog img { width: 80%; margin: 0 auto; border-radius: 50%; }
-.hero-logo { width: min(68vw, 320px); margin: 0 auto; filter: drop-shadow(0 20px 40px rgba(70,33,111,.22)); animation: bob 5s ease-in-out infinite; cursor: pointer; user-select: none; -webkit-user-select: none; }
-.hero-logo.wiggle { animation: wiggle .5s ease-in-out; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg) scale(1.04); } 75% { transform: rotate(6deg) scale(1.04); } }
 .hero-copy { text-align: center; }
@@ -142,11 +137,7 @@ p { margin: 0 0 1em; }
 .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 1.8rem; }
 .pill { display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .9rem; border-radius: 999px; background: var(--white); border: 1.5px solid var(--lavender); font-size: .82rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--purple); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; }
-@media (min-width: 820px) {
-  .hero-grid { grid-template-columns: 1fr 1.2fr; }
-  .hero-copy { text-align: left; }
-  .hero-copy p.lead, .pills, .hero-actions { margin-left: 0; justify-content: flex-start; }
-}
+.hero-grid { max-width: 760px; margin: 0 auto; }
 
 /* Paw trail */
 .paw-print { position: fixed; width: 26px; height: 26px; pointer-events: none; z-index: 40; color: var(--purple); opacity: .55; animation: pawFade 1.4s ease-out forwards; }
@@ -366,13 +357,11 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .float-paw, .paw-print, .confetti { display: none !important; }
   .reveal { opacity: 1; transform: none; }
-  .hero-logo { animation: none; }
 }
 
 /* Tagline in the logo's lettering, and filled logo-style shapes on the approach cards */
 .tagline { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .9rem; margin: 0 0 1.8rem; font-weight: 800; font-size: .85rem; letter-spacing: .28em; text-transform: uppercase; color: var(--charcoal); }
 .tagline span { color: var(--purple); font-size: .7rem; letter-spacing: 0; }
-@media (min-width: 820px) { .hero-copy .tagline { justify-content: flex-start; } }
 .flip-front .big { font-size: inherit; margin-bottom: 1rem; }
 .shape { position: relative; width: 96px; height: 96px; display: grid; place-items: center; color: var(--purple); margin: 0 auto; }
 .shape::before { content: ''; position: absolute; inset: 6px; border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%; background: var(--lavender-light); transition: transform .4s; }

@@ -178,27 +178,6 @@
     hero.addEventListener('pointerdown', e => { if (e.target.closest('a, button')) return; stamp(e.clientX, e.clientY); });
   }
 
-  /* ---------- Logo easter egg ---------- */
-  const logo = $('#hero-logo');
-  if (logo) {
-    let pats = 0, resetTimer;
-    logo.addEventListener('click', e => {
-      pats++;
-      logo.classList.remove('wiggle');
-      void logo.offsetWidth;
-      logo.classList.add('wiggle');
-      clearTimeout(resetTimer);
-      resetTimer = setTimeout(() => { pats = 0; }, 2500);
-      if (pats >= 5) {
-        pats = 0;
-        D.confetti(e.clientX, e.clientY, 36);
-        D.toast('Good dog! Lead with Love');
-      } else if (pats === 3) {
-        D.toast('Keep patting...');
-      }
-    });
-  }
-
   /* ---------- Services grid ---------- */
   const grid = $('#services-grid');
   if (grid) {

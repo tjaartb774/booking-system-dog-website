@@ -26,6 +26,7 @@
     mail: st('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'),
     pin: st('<path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.5"/>'),
     check: st('<path d="m5 12 4 4L19 6"/>'),
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
     dog: st('<path d="M4 8c0-2 1-4 3-4 1 0 2 1 2 2M20 8c0-2-1-4-3-4-1 0-2 1-2 2"/><path d="M5 9c-1 3 0 9 7 11 7-2 8-8 7-11-2-2-4-3-7-3s-5 1-7 3z"/><circle cx="9.5" cy="12" r="1" fill="currentColor"/><circle cx="14.5" cy="12" r="1" fill="currentColor"/>'),
     calendar: st('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
     info: st('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),

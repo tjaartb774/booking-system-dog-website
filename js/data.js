@@ -125,7 +125,7 @@ window.BTL = {
       options: [
         { label: 'There are knots or mats', emoji: '🪢', scores: { 'dematting': 5 } },
         { label: 'They are a senior or have a medical condition', emoji: '💜', scores: { 'senior-care': 5 } },
-        { label: 'Just the nails are long', emoji: '🐾', scores: { 'nails-paws': 5 } },
+        { label: 'Just the nails are long', icon: 'paw', scores: { 'nails-paws': 5 } },
         { label: 'Nope, all good', emoji: '😊', scores: {} }
       ]
     }

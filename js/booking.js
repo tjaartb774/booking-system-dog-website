@@ -137,7 +137,7 @@
     const s = serviceObj();
     const flags = FLAGS.filter(f => state.flags[f.id]).map(f => '• ' + f.text);
     const lines = [
-      'Hi Beyond the Leash! 🐾 I would like to book a groom.',
+      'Hi Beyond the Leash! I would like to book a groom.',
       '',
       '🐶 Dog: ' + state.dogName + (state.breed ? ' (' + state.breed + ')' : ''),
       '📏 Size: ' + (state.size || '-') + (state.age ? ' · ' + state.age : ''),
@@ -173,7 +173,7 @@
       '<details class="preview-wrap"><summary>Preview the message</summary><pre class="preview" id="msg-preview">' + esc(msg) + '</pre></details>' +
       '<p style="color:var(--muted);font-size:.9rem;margin-top:1rem">WhatsApp opens with the message filled in. Just press send and we will reply to confirm a time and quote.</p>';
     $('#copy-msg').addEventListener('click', () => {
-      const done = () => D.toast('Message copied 🐾');
+      const done = () => D.toast('Message copied');
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(msg).then(done, () => fallbackCopy(msg, done));
       else fallbackCopy(msg, done);
     });
@@ -247,7 +247,7 @@
       if (!/^\+?[\d\s()-]{8,}$/.test(state.phone.trim())) bad('phone');
       if (!state.agree) bad('agree');
     }
-    if (!ok) D.toast('A few details are missing 🐾');
+    if (!ok) D.toast('A few details are missing');
     return ok;
   }
 
@@ -282,7 +282,7 @@
     state.service = e.detail.service; save();
     panels();
     go(state.dogName.trim() ? 1 : 0);
-    D.toast((serviceObj() ? serviceObj().name : 'Service') + ' selected 🐾');
+    D.toast((serviceObj() ? serviceObj().name : 'Service') + ' selected');
   });
 
   shell();

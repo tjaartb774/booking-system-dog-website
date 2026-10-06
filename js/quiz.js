@@ -26,7 +26,7 @@
       '<div class="option-grid">' +
       q.options.map((o, i) =>
         '<button type="button" class="option" data-i="' + i + '" aria-pressed="' + (answers[step] === i) + '">' +
-        '<span class="emoji" aria-hidden="true">' + o.emoji + '</span><b>' + o.label + '</b></button>').join('') +
+        '<span class="emoji" aria-hidden="true">' + (o.icon ? D.icons[o.icon] : o.emoji) + '</span><b>' + o.label + '</b></button>').join('') +
       '</div>' +
       '<div class="quiz-nav">' +
       (step > 0 ? '<button type="button" class="btn btn-ghost btn-sm" data-back>← Back</button>' : '<span></span>') +

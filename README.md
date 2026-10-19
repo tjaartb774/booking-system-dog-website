@@ -6,6 +6,7 @@ A fun, interactive site for Beyond the Leash, a force-free dog grooming and trai
 
 - `index.html` - home page: hero with floating paws and a paw-print cursor trail, flip cards for the Force-Free / Fun / Trust approach, services (quote on request), the Groom Finder quiz, natural products strip, pre-visit checklist, community links, booking wizard and contact details.
 - `terms.html` - the full Booking Policy and Terms as an accordion.
+- `catalog.html` - the shop: product grid with category filters, a basket saved on the visitor's device, and an "Order on WhatsApp" button that sends the basket as a message. Behaviour in `js/catalog.js`.
 - `js/data.js` - **the one file to edit** for contact details, social links, services, quiz rules and checklist items.
 - `js/main.js`, `js/quiz.js`, `js/booking.js` - behaviour.
 - `css/styles.css` - design (cream, charcoal and purple taken from the logo).
@@ -20,7 +21,8 @@ The booking wizard collects the dog's details, service, preferred date, behaviou
 1. **Facebook page URL** - `business.facebook` in `js/data.js` is a placeholder (`https://www.facebook.com/`).
 2. **Services** - the list in `js/data.js` is typical grooming wording. Edit names, blurbs and what each includes to match what you offer. Set `training: true` on any item that should show the Training tag.
 3. **Service area** - `business.serviceArea` currently says "Stilbaai, Riversdale and surrounds".
-4. **Natural products strip** - the five badges on the home page mirror the ones on the Facebook cover. Delete the `#natural` section in `index.html` if you do not want it.
+4. **Catalog products** - the `products` list in `js/data.js` is entirely placeholder names, sizes, descriptions and prices. Replace them with the real range. When you have photos, put them in `assets/products/` and set each product's `image` to that path; until then the tile shows "Photo coming soon".
+5. **Natural products strip** - the five badges on the home page mirror the ones on the Facebook cover. Delete the `#natural` section in `index.html` if you do not want it.
 
 ## Run locally
 

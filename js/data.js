@@ -151,5 +151,26 @@ window.BTL = {
     { id: 'collect', text: 'I can collect promptly once I get the "ready" message' }
   ],
 
-  timeSlots: ['Morning', 'Midday', 'Afternoon', 'Any time']
+  timeSlots: ['Morning', 'Midday', 'Afternoon', 'Any time'],
+
+  /* Catalog. PLACEHOLDER: every product, price and description below is a
+     stand-in until the real range is supplied. Set `image` to a path such as
+     'assets/products/shampoo.jpg' once photos exist; leave it empty to show
+     the "photo coming soon" tile. Prices are in rand. */
+  shop: {
+    currency: 'R',
+    note: 'Collect from the parlour in Stilbaai, or ask about delivery. Payment and collection are confirmed on WhatsApp.',
+    categories: ['Bath time', 'Coat care', 'Skin & paws', 'Tools', 'Treats']
+  },
+  products: [
+    { id: 'shampoo', name: 'Gentle Dog Shampoo', size: '250 ml', category: 'Bath time', price: 149, blurb: 'Plant-based, low-foam wash for sensitive skin.', image: '' },
+    { id: 'conditioner', name: 'Soothing Conditioner', size: '250 ml', category: 'Bath time', price: 139, blurb: 'Softens the coat and makes brushing easier.', image: '' },
+    { id: 'detangle', name: 'Leave-in Detangling Spray', size: '200 ml', category: 'Coat care', price: 129, blurb: 'Mist before brushing to ease knots without pulling.', image: '' },
+    { id: 'cologne', name: 'Fresh Coat Spritz', size: '100 ml', category: 'Coat care', price: 99, blurb: 'Light, natural fragrance between baths.', image: '' },
+    { id: 'balm', name: 'Paw & Nose Balm', size: '50 ml', category: 'Skin & paws', price: 89, blurb: 'Nourishes dry pads and noses.', image: '' },
+    { id: 'ears', name: 'Ear Cleaner', size: '100 ml', category: 'Skin & paws', price: 95, blurb: 'Gentle weekly clean for healthy ears.', image: '' },
+    { id: 'slicker', name: 'Slicker Brush', size: 'Medium', category: 'Tools', price: 189, blurb: 'The brush we use for everyday coat care.', image: '' },
+    { id: 'comb', name: 'Steel Grooming Comb', size: 'Fine / coarse', category: 'Tools', price: 95, blurb: 'For checking the coat all the way to the skin.', image: '' },
+    { id: 'treats', name: 'Natural Training Treats', size: '200 g', category: 'Treats', price: 79, blurb: 'Soft, small and perfect for table-time rewards.', image: '' }
+  ]
 };

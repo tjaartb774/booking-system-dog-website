@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop | Beyond the Leash</title>
+  <meta name="description" content="Natural grooming products, tools and treats from Beyond the Leash in Stilbaai. Order on WhatsApp.">
+  <meta name="theme-color" content="#5B2D8E">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Great+Vibes&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.png" alt="Beyond the Leash logo" width="50" height="50">
+        <span>Beyond the Leash<small>Dog Grooming</small></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#approach">Our Approach</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#book">Book</a></li>
+        <li><a href="catalog.html" class="active">Shop</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+      <button class="btn btn-primary btn-sm nav-cta basket-btn" type="button" data-open-basket>
+        <span data-icon="basket"></span> Basket <span class="count" data-basket-count>0</span>
+      </button>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+    </nav>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html#approach">Our Approach</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#book">Book a groom</a>
+      <a href="catalog.html">Shop</a>
+      <a href="terms.html">Booking Policy &amp; Terms</a>
+      <a class="btn btn-wa" data-wa-link href="#">WhatsApp us</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="terms-hero">
+    <div class="container">
+      <span class="script">Lead with Love</span>
+      <h1>Shop</h1>
+      <p style="max-width:620px;margin:0 auto 1.2rem;color:var(--muted)">The natural products, tools and treats we use and trust in the parlour, for you to take home. Add what you need and send your order on WhatsApp.</p>
+      <p class="shop-note" data-shop-note></p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" id="shop">
+    <div class="container">
+      <div class="chips cat-chips" id="cat-chips" role="tablist" aria-label="Categories"></div>
+      <div class="products-grid" id="products-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <img src="assets/logo.png" alt="" width="110" height="110">
+    <div class="script">Lead with Love</div>
+    <p class="heart-line">❤️ Different space. Same hands. Same heart. ❤️</p>
+    <nav aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#book">Book</a>
+      <a href="terms.html">Booking Policy &amp; Terms</a>
+      <a data-fb-link href="#" target="_blank" rel="noopener">Facebook</a>
+      <a data-tiktok-link href="#" target="_blank" rel="noopener">TikTok</a>
+    </nav>
+    <small>Beyond the Leash · <span data-town></span></small>
+    <small>© <span data-year></span> Beyond the Leash. Force-Free • Fun • Trust.</small>
+  </div>
+</footer>
+
+<!-- Basket bar (mobile) and drawer -->
+<button class="basket-bar" type="button" data-open-basket hidden>
+  <span><span data-icon="basket"></span> <b data-basket-count>0</b> in basket</span>
+  <span data-basket-total>R0</span>
+</button>
+<div class="drawer-backdrop" data-close-basket hidden></div>
+<aside class="drawer" id="basket" aria-label="Your basket" hidden>
+  <div class="drawer-head">
+    <h3>Your basket</h3>
+    <button class="btn btn-ghost btn-sm" type="button" data-close-basket aria-label="Close basket">Close</button>
+  </div>
+  <div class="drawer-body" id="basket-lines"></div>
+  <div class="drawer-foot">
+    <div class="total-row"><span>Total</span><b data-basket-total>R0</b></div>
+    <p class="shop-note" data-shop-note></p>
+    <a class="btn btn-wa" id="order-wa" href="#" target="_blank" rel="noopener"><span data-icon="whatsapp"></span> Order on WhatsApp</a>
+    <button class="btn btn-ghost btn-sm" type="button" id="clear-basket">Empty basket</button>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/catalog.js"></script>
+</body>
+</html>

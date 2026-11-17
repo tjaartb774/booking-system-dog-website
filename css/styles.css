@@ -479,3 +479,8 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
 .results-line { display: flex; justify-content: center; align-items: center; gap: .6rem; flex-wrap: wrap; margin: .9rem 0 0; font-size: .85rem; color: var(--muted); font-weight: 700; }
 .results-line .btn-sm { min-height: 32px; padding: .3rem .8rem; font-size: .85rem; }
 .results-line .btn[hidden] { display: none; }
+
+/* Treatment durations */
+.time-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .8rem; border-radius: 999px; background: var(--cream); border: 1.5px solid var(--lavender-light); color: var(--muted); font-weight: 800; font-size: .78rem; margin: 0 0 .5rem .4rem; vertical-align: middle; }
+.time-pill .ico { width: 1em; height: 1em; color: var(--purple); }
+.service-pick .option .dur { color: var(--purple); font-weight: 800; }

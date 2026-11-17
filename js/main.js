@@ -26,6 +26,7 @@
     mail: st('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'),
     pin: st('<path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.5"/>'),
     check: st('<path d="m5 12 4 4L19 6"/>'),
+    clock: st('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
     basket: st('<path d="M6 8h12l-1.2 10.5a1.5 1.5 0 0 1-1.5 1.3H8.7a1.5 1.5 0 0 1-1.5-1.3z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'),
     plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
     dog: st('<path d="M4 8c0-2 1-4 3-4 1 0 2 1 2 2M20 8c0-2-1-4-3-4-1 0-2 1-2 2"/><path d="M5 9c-1 3 0 9 7 11 7-2 8-8 7-11-2-2-4-3-7-3s-5 1-7 3z"/><circle cx="9.5" cy="12" r="1" fill="currentColor"/><circle cx="14.5" cy="12" r="1" fill="currentColor"/>'),
@@ -54,6 +55,21 @@
   $$('[data-town]').forEach(e => { e.textContent = B.town; });
   $$('[data-service-area]').forEach(e => { e.textContent = 'Serving ' + B.serviceArea; });
   $$('[data-year]').forEach(e => { e.textContent = String(new Date().getFullYear()); });
+
+  /* ---------- Duration formatting ---------- */
+  D.fmtDuration = function (d) {
+    if (!d) return '';
+    const unit = m => {
+      if (m < 60) return m + ' min';
+      if (m % 60 === 0) return (m / 60) + (m === 60 ? ' hour' : ' hours');
+      if (m % 60 === 30) return Math.floor(m / 60) + '\u00bd hours';
+      return Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0');
+    };
+    if (d.min === d.max) return 'about ' + unit(d.min);
+    if (d.min < 60 && d.max < 60) return 'about ' + d.min + ' to ' + d.max + ' min';
+    if (d.min % 60 === 0 && d.max % 60 === 0) return 'about ' + (d.min / 60) + ' to ' + (d.max / 60) + ' hours';
+    return 'about ' + unit(d.min) + ' to ' + unit(d.max);
+  };
 
   /* ---------- Toast ---------- */
   let toastTimer;
@@ -190,7 +206,7 @@
         <h3>${s.name}</h3>
         <p>${s.blurb}</p>
         <ul>${s.includes.map(x => '<li>' + x + '</li>').join('')}</ul>
-        <span class="quote">Quote on request</span>
+        <span class="quote">Quote on request</span>${s.duration ? '<span class="time-pill"><span class="ico">' + ICONS.clock + '</span>' + D.fmtDuration(s.duration) + '</span>' : ''}
         <p class="note">${s.quoteNote}</p>
         <a class="btn btn-outline btn-sm" href="#book" data-book-service="${s.id}">Book ${s.training ? 'a chat' : 'this'}</a>
       </article>`).join('');

@@ -127,7 +127,7 @@
     $('[data-panel="service"]').innerHTML =
       '<p class="step-label">Step 2 of 6</p><h3>What does ' + esc(dog()) + ' need?</h3>' +
       '<div class="field" data-field="service"><div class="service-pick">' +
-      D.services.map(s => '<button type="button" class="option" data-service-pick="' + s.id + '" aria-pressed="' + (state.service === s.id) + '"><b>' + s.name + '</b><small>' + s.blurb + '</small></button>').join('') +
+      D.services.map(s => '<button type="button" class="option" data-service-pick="' + s.id + '" aria-pressed="' + (state.service === s.id) + '"><b>' + s.name + '</b><small>' + s.blurb + '</small>' + (s.duration ? '<small class="dur">Takes ' + D.fmtDuration(s.duration) + '</small>' : '') + '</button>').join('') +
       '</div><div class="error">Choose a service, or pick the closest and tell us more later</div></div>' +
       '<p style="color:var(--muted);font-size:.9rem">Not sure? Try the <a href="#finder">Groom Finder</a> or just pick the closest option. We will confirm with you.</p>';
 
@@ -140,7 +140,7 @@
       '<div class="field" data-field="slot"><label>Preferred time</label><div class="chips">' +
       D.timeSlots.map(s => '<button type="button" class="chip" data-chip="slot" data-value="' + s + '" aria-pressed="' + (state.slot === s) + '">' + s + '</button>').join('') +
       '</div><div class="error">Pick a time of day</div></div>' +
-      '<p style="color:var(--muted);font-size:.9rem">Appointment times are reserved for ' + esc(dog()) + ', so please give 24 hours\' notice if plans change.</p>';
+      '<p style="color:var(--muted);font-size:.9rem">' + (serviceObj() && serviceObj().duration ? 'A ' + esc(serviceObj().name.toLowerCase()) + ' usually takes ' + D.fmtDuration(serviceObj().duration) + '. ' : '') + 'Appointment times are reserved for ' + esc(dog()) + ', so please give 24 hours\' notice if plans change.</p>';
 
     $('[data-panel="about"]').innerHTML =
       '<p class="step-label">Step 4 of 6</p><h3>Anything we should know about ' + esc(dog()) + '?</h3>' +
@@ -171,6 +171,7 @@
     const rows = [
       ['Dog', state.dogName + (state.breed ? ' (' + state.breed + ')' : '') + (state.size ? ', ' + state.size.toLowerCase() : '') + (state.age ? ', ' + state.age.toLowerCase() : '')],
       ['Service', s ? s.name : ''],
+      ['Time needed', s && s.duration ? D.fmtDuration(s.duration) + ' (we confirm once we meet ' + dog() + ')' : ''],
       ['Date', fmtDate(state.date) + (state.slot ? ', ' + state.slot.toLowerCase() : '') + (state.altDate ? ' (backup: ' + fmtDate(state.altDate) + ')' : '')],
       ['Good to know', flags.length ? flags.join('; ') : 'Nothing flagged'],
       ['Notes', state.notes.trim() || 'None'],
@@ -189,6 +190,7 @@
       '🐶 Dog: ' + state.dogName + (state.breed ? ' (' + state.breed + ')' : ''),
       '📏 Size: ' + (state.size || '-') + (state.age ? ' · ' + state.age : ''),
       '✂️ Service: ' + (s ? s.name : '-'),
+      '⏱️ Time needed: ' + (s && s.duration ? D.fmtDuration(s.duration) : '-'),
       '📅 Preferred: ' + fmtDate(state.date) + (state.slot ? ' · ' + state.slot : ''),
     ];
     if (state.altDate) lines.push('📅 Backup: ' + fmtDate(state.altDate));

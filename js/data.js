@@ -25,11 +25,15 @@ window.BTL = {
 
   /* Grooming and training services. No prices on purpose: the policy says
      quotes depend on breed, size, coat and behaviour.
+     `duration` is the usual time in minutes (min to max). PLACEHOLDER: adjust
+     these to how long each treatment really takes you. Shown on the service
+     cards, in the booking wizard and in the WhatsApp request.
      PLACEHOLDER: the list and wording below are typical grooming services.
      Edit, remove or add to match what you actually offer. */
   services: [
     {
       id: 'full-groom',
+      duration: { min: 120, max: 180 },
       icon: 'scissors',
       name: 'Full Groom',
       blurb: 'The works, done gently and at your dog\'s pace.',
@@ -38,6 +42,7 @@ window.BTL = {
     },
     {
       id: 'bath-tidy',
+      duration: { min: 60, max: 90 },
       icon: 'bubbles',
       name: 'Bath & Tidy',
       blurb: 'A fresh wash, dry and a light tidy between full grooms.',
@@ -46,6 +51,7 @@ window.BTL = {
     },
     {
       id: 'puppy-intro',
+      duration: { min: 45, max: 60 },
       icon: 'puppy',
       name: 'Puppy Introduction',
       blurb: 'Short, happy first visits that teach puppies grooming is safe.',
@@ -54,6 +60,7 @@ window.BTL = {
     },
     {
       id: 'nails-paws',
+      duration: { min: 20, max: 30 },
       icon: 'paw',
       name: 'Nail Trim & Paw Care',
       blurb: 'Nails, paw pads and the bits in between.',
@@ -62,6 +69,7 @@ window.BTL = {
     },
     {
       id: 'dematting',
+      duration: { min: 120, max: 240 },
       icon: 'comb',
       name: 'De-matting & Coat Reset',
       blurb: 'When brushing would hurt, we clip shorter and start fresh.',
@@ -70,6 +78,7 @@ window.BTL = {
     },
     {
       id: 'senior-care',
+      duration: { min: 90, max: 150 },
       icon: 'heart',
       name: 'Senior & Special-Care Groom',
       blurb: 'Extra patience for older dogs and dogs with medical needs.',
@@ -78,6 +87,7 @@ window.BTL = {
     },
     {
       id: 'training',
+      duration: { min: 60, max: 60 },
       icon: 'star',
       name: 'Force-Free Training',
       blurb: 'In-person classes built on trust, not force.',

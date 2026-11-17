@@ -21,7 +21,7 @@ The booking wizard collects the dog's details, service, preferred date, behaviou
 1. **Facebook page URL** - `business.facebook` in `js/data.js` is a placeholder (`https://www.facebook.com/`).
 2. **Services** - the list in `js/data.js` is typical grooming wording. Edit names, blurbs and what each includes to match what you offer. Set `training: true` on any item that should show the Training tag.
 3. **Service area** - `business.serviceArea` currently says "Stilbaai, Riversdale and surrounds".
-4. **Catalog products** - the `products` list in `js/data.js` is entirely placeholder names, sizes, descriptions and prices. Replace them with the real range. When you have photos, put them in `assets/products/` and set each product's `image` to that path; until then the tile shows "Photo coming soon".
+4. **Catalog products** - the `products` list in `js/data.js` holds 21 items from the Meet the Brands price list (three per brand) with sizes and rand prices as listed on 17 November 2026. Pictures are the brands' own product photos loaded straight from their websites, so they will change or break if a brand moves a photo. To use your own photos, put them in `assets/products/` and set each product's `image` to that path; a broken picture falls back to the "Photo coming soon" tile.
 5. **Natural products strip** - the five badges on the home page mirror the ones on the Facebook cover. Delete the `#natural` section in `index.html` if you do not want it.
 
 ## Run locally

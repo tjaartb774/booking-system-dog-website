@@ -34,10 +34,52 @@
   let step = 0;
 
   function load() {
-    const base = { dogName: '', breed: '', size: '', age: '', service: '', date: '', slot: '', altDate: '', flags: {}, notes: '', name: '', phone: '', agree: false, photos: false };
+    const base = { dogName: '', breed: '', size: '', age: '', service: '', date: '', slot: '', altDate: '', flags: {}, notes: '', name: '', phone: '', agree: false, photos: false, remember: true };
     try { return Object.assign(base, JSON.parse(sessionStorage.getItem(KEY) || '{}')); } catch (e) { return base; }
   }
   function save() { try { sessionStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ } }
+
+  /* ---------- Remembered details (this device only) ----------
+     Saved in the visitor's own browser, never sent anywhere, so each customer
+     only ever sees what they typed themselves. */
+  const PKEY = 'btl-profile';
+  function loadProfile() {
+    try { const p = JSON.parse(localStorage.getItem(PKEY) || 'null'); if (p && Array.isArray(p.dogs)) return p; } catch (e) { /* ignore */ }
+    return null;
+  }
+  let profile = loadProfile();
+  function saveProfile() {
+    if (!state.remember) return;
+    const dog = { dogName: state.dogName.trim(), breed: state.breed.trim(), size: state.size, age: state.age, flags: state.flags, notes: state.notes.trim() };
+    if (!dog.dogName) return;
+    const p = profile || { dogs: [], owner: {} };
+    const i = p.dogs.findIndex(d => d.dogName.toLowerCase() === dog.dogName.toLowerCase());
+    if (i >= 0) p.dogs[i] = dog; else p.dogs.push(dog);
+    p.owner = { name: state.name.trim(), phone: state.phone.trim(), photos: state.photos };
+    p.savedAt = Date.now();
+    profile = p;
+    try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) { /* private mode */ }
+  }
+  function forgetProfile() {
+    profile = null;
+    try { localStorage.removeItem(PKEY); } catch (e) { /* ignore */ }
+  }
+  function applyDog(d) {
+    state.dogName = d.dogName || ''; state.breed = d.breed || ''; state.size = d.size || ''; state.age = d.age || '';
+    state.flags = Object.assign({}, d.flags || {}); state.notes = d.notes || '';
+  }
+  function applyOwner() {
+    if (!profile || !profile.owner) return;
+    if (!state.name) state.name = profile.owner.name || '';
+    if (!state.phone) state.phone = profile.owner.phone || '';
+    if (profile.owner.photos) state.photos = true;
+  }
+  // Prefill a fresh form from what this device remembers. Agreement to the
+  // terms is never prefilled: it must be ticked every time.
+  if (profile && !state.dogName) {
+    if (profile.dogs.length === 1) applyDog(profile.dogs[0]);
+    applyOwner();
+  }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const dog = () => state.dogName.trim() || 'your dog';
   const serviceObj = () => D.services.find(s => s.id === state.service);
@@ -66,8 +108,11 @@
   const text = (id, ph, type) => '<input type="' + (type || 'text') + '" id="f-' + id + '" data-bind="' + id + '" placeholder="' + ph + '" value="' + esc(state[id]) + '" autocomplete="off">';
 
   function panels() {
+    const savedDogs = profile && profile.dogs.length ? '<div class="saved-dogs"><span>Welcome back! Booking for</span>' +
+      profile.dogs.map(d => '<button type="button" class="chip" data-saved-dog="' + esc(d.dogName) + '" aria-pressed="' + (state.dogName.toLowerCase() === d.dogName.toLowerCase()) + '">' + esc(d.dogName) + '</button>').join('') +
+      '<button type="button" class="chip" data-saved-dog="" aria-pressed="' + (!state.dogName) + '">A new dog</button></div>' : '';
     $('[data-panel="dog"]').innerHTML =
-      '<p class="step-label">Step 1 of 6</p><h3>Tell us about your dog</h3>' +
+      '<p class="step-label">Step 1 of 6</p><h3>Tell us about your dog</h3>' + savedDogs +
       '<div class="row-2">' +
       field('dogName', 'Dog\'s name', text('dogName', 'e.g. Bella')) +
       field('breed', 'Breed or mix', text('breed', 'e.g. Spaniel cross'), { optional: true }) +
@@ -113,7 +158,9 @@
       '</div>' +
       '<div class="field" data-field="agree"><label class="toggle ' + (state.agree ? 'on' : '') + '"><input type="checkbox" data-bind-check="agree" ' + (state.agree ? 'checked' : '') + '><span class="agree">I have read and agree to the <a href="terms.html" target="_blank" rel="noopener">Booking Policy &amp; Terms</a>, including the force-free approach.</span></label>' +
       '<div class="error">Please read and accept the Booking Policy &amp; Terms to continue</div></div>' +
-      '<div class="field"><label class="toggle ' + (state.photos ? 'on' : '') + '"><input type="checkbox" data-bind-check="photos" ' + (state.photos ? 'checked' : '') + '><span class="agree">You may share photos of ' + esc(dog()) + ' on social media <span class="opt">(optional, never affects care)</span></span></label></div>';
+      '<div class="field"><label class="toggle ' + (state.photos ? 'on' : '') + '"><input type="checkbox" data-bind-check="photos" ' + (state.photos ? 'checked' : '') + '><span class="agree">You may share photos of ' + esc(dog()) + ' on social media <span class="opt">(optional, never affects care)</span></span></label></div>' +
+      '<div class="field"><label class="toggle ' + (state.remember ? 'on' : '') + '"><input type="checkbox" data-bind-check="remember" ' + (state.remember ? 'checked' : '') + '><span class="agree">Remember me and ' + esc(dog()) + ' on this device so next time is quicker <span class="opt">(saved only in your browser)</span></span></label>' +
+      (profile ? '<p class="forget-row"><button type="button" class="btn btn-ghost btn-sm" data-forget>Forget my saved details</button></p>' : '') + '</div>';
 
     $('[data-panel="send"]').innerHTML = ''; // built on demand
   }
@@ -173,11 +220,13 @@
       '<details class="preview-wrap"><summary>Preview the message</summary><pre class="preview" id="msg-preview">' + esc(msg) + '</pre></details>' +
       '<p style="color:var(--muted);font-size:.9rem;margin-top:1rem">WhatsApp opens with the message filled in. Just press send and we will reply to confirm a time and quote.</p>';
     $('#copy-msg').addEventListener('click', () => {
+      saveProfile();
       const done = () => D.toast('Message copied');
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(msg).then(done, () => fallbackCopy(msg, done));
       else fallbackCopy(msg, done);
     });
     $('#send-wa').addEventListener('click', e => {
+      saveProfile();
       D.confetti(e.clientX, e.clientY, 30);
       D.toast('Opening WhatsApp... see you soon! 💜');
     });
@@ -203,8 +252,8 @@
     if (prev) prev.addEventListener('click', () => go(step - 1));
     if (next) next.addEventListener('click', () => { if (validate(step)) go(step + 1); });
     if (reset) reset.addEventListener('click', () => {
-      state = { dogName: '', breed: '', size: '', age: '', service: '', date: '', slot: '', altDate: '', flags: {}, notes: '', name: '', phone: '', agree: false, photos: false };
-      save(); panels(); go(0);
+      state = { dogName: '', breed: '', size: '', age: '', service: '', date: '', slot: '', altDate: '', flags: {}, notes: '', name: '', phone: '', agree: false, photos: false, remember: true };
+      applyOwner(); save(); panels(); go(0);
     });
   }
 
@@ -275,6 +324,20 @@
     $$('[data-flag]').forEach(el => {
       el.onchange = () => { state.flags[el.dataset.flag] = el.checked; save(); };
     });
+    $$('[data-saved-dog]').forEach(el => {
+      el.onclick = () => {
+        const d = profile && profile.dogs.find(x => x.dogName === el.dataset.savedDog);
+        if (d) applyDog(d); else applyDog({});
+        save(); panels(); nav(); bind();
+        D.toast(d ? d.dogName + '\'s details filled in' : 'Fresh form for a new dog');
+      };
+    });
+    const forget = $('[data-forget]');
+    if (forget) forget.onclick = () => {
+      forgetProfile();
+      state.remember = false; save(); panels(); nav(); bind();
+      D.toast('Saved details removed from this device');
+    };
   }
 
   /* Preselect from "Book this" links (services grid, quiz) */

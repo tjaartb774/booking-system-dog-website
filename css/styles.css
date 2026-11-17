@@ -431,3 +431,8 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
 .drawer-foot .shop-note { margin: 0; text-align: left; }
 .btn.disabled { opacity: .55; }
 .btn [data-icon] svg { width: 1.15em; height: 1.15em; vertical-align: -.2em; }
+
+/* Remembered booking details */
+.saved-dogs { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; background: var(--lavender-light); border-radius: var(--radius-sm); padding: .8rem 1rem; margin-bottom: 1.2rem; font-weight: 700; }
+.saved-dogs span { margin-right: .3rem; }
+.forget-row { margin: .4rem 0 0; }

@@ -56,6 +56,9 @@
     const i = p.dogs.findIndex(d => d.dogName.toLowerCase() === dog.dogName.toLowerCase());
     if (i >= 0) p.dogs[i] = dog; else p.dogs.push(dog);
     p.owner = { name: state.name.trim(), phone: state.phone.trim(), photos: state.photos };
+    p.history = (p.history || []).filter(h => !(h.date === state.date && h.slot === state.slot && h.dog.toLowerCase() === dog.dogName.toLowerCase()));
+    p.history.unshift({ dog: dog.dogName, date: state.date, slot: state.slot, service: state.service, serviceName: serviceObj() ? serviceObj().name : '', sentAt: Date.now() });
+    p.history = p.history.slice(0, 30);
     p.savedAt = Date.now();
     profile = p;
     try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) { /* private mode */ }
@@ -63,6 +66,18 @@
   function forgetProfile() {
     profile = null;
     try { localStorage.removeItem(PKEY); } catch (e) { /* ignore */ }
+  }
+  function history() { return (profile && profile.history) || []; }
+  function lastVisit(dogName) {
+    const list = history().filter(h => !dogName || h.dog.toLowerCase() === dogName.toLowerCase());
+    return list.sort((a, b) => (b.date || '').localeCompare(a.date || ''))[0] || null;
+  }
+  function daysFrom(iso) { const d = new Date(iso + 'T00:00:00'); return Math.round((Date.now() - d.getTime()) / 86400000); }
+  function visitLine(h) {
+    const when = fmtDate(h.date) + (h.slot ? ', ' + h.slot.toLowerCase() : '');
+    const n = daysFrom(h.date);
+    const ago = n > 1 ? n + ' days ago' : n === 1 ? 'yesterday' : n === 0 ? 'today' : 'in ' + (-n) + ' day' + (n === -1 ? '' : 's');
+    return esc(h.serviceName || 'Groom') + ' on ' + esc(when) + ' (' + ago + ')';
   }
   function applyDog(d) {
     state.dogName = d.dogName || ''; state.breed = d.breed || ''; state.size = d.size || ''; state.age = d.age || '';
@@ -90,6 +105,44 @@
     return isNaN(d) ? iso : d.toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
   };
 
+  /* ---------- Availability (shared booking diary) ----------
+     Talks to the Google Apps Script in backend/google-apps-script.gs. Slots
+     already requested by anyone are greyed out, and the slot is reserved
+     when the request is sent. */
+  const API = (D.business.bookingApi || '').trim();
+  let taken = new Set();
+  let takenLoadedAt = 0;
+  function isoAfter(days) { const d = new Date(); d.setDate(d.getDate() + days); return d.toISOString().slice(0, 10); }
+  function loadTaken(force) {
+    if (!API) return Promise.resolve();
+    if (!force && Date.now() - takenLoadedAt < 60000) return Promise.resolve();
+    const url = API + (API.indexOf('?') >= 0 ? '&' : '?') + 'action=taken&from=' + todayISO() + '&to=' + isoAfter(120);
+    return fetch(url, { redirect: 'follow' }).then(r => r.json()).then(j => {
+      if (j && j.ok && Array.isArray(j.taken)) { taken = new Set(j.taken); takenLoadedAt = Date.now(); }
+    }).catch(() => { /* offline: leave what we have */ });
+  }
+  const isTaken = (date, slot) => !!date && slot !== 'Any time' && taken.has(date + '|' + slot);
+  const dayFull = date => D.timeSlots.filter(sl => sl !== 'Any time').every(sl => isTaken(date, sl));
+  function paintSlots() {
+    $$('[data-chip="slot"]').forEach(c => {
+      const t = isTaken(state.date, c.dataset.value) || (c.dataset.value === 'Any time' && dayFull(state.date));
+      c.disabled = t;
+      c.classList.toggle('taken', t);
+      c.title = t ? 'Already booked' : '';
+      if (t && state.slot === c.dataset.value) { state.slot = ''; save(); c.setAttribute('aria-pressed', 'false'); }
+    });
+    const note = $('[data-availability]');
+    if (note) note.textContent = !API ? '' : (!state.date ? 'Pick a date to see which times are still open.' : (dayFull(state.date) ? 'That day is fully booked. Please try another date.' : 'Greyed-out times are already booked.'));
+  }
+  function reserve() {
+    if (!API) return Promise.resolve({ ok: true, skipped: true });
+    const body = JSON.stringify({ action: 'reserve', date: state.date, slot: state.slot, dog: state.dogName.trim(), owner: state.name.trim(), phone: state.phone.trim(), service: serviceObj() ? serviceObj().name : '' });
+    // text/plain keeps it a "simple" request, which Apps Script accepts without a preflight
+    return fetch(API, { method: 'POST', body: body, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow', keepalive: true })
+      .then(r => r.json()).catch(() => ({ ok: false, reason: 'network' }));
+  }
+  let reservedKey = '';
+
   /* ---------- Rendering ---------- */
   function shell() {
     root.innerHTML =
@@ -111,8 +164,13 @@
     const savedDogs = profile && profile.dogs.length ? '<div class="saved-dogs"><span>Welcome back! Booking for</span>' +
       profile.dogs.map(d => '<button type="button" class="chip" data-saved-dog="' + esc(d.dogName) + '" aria-pressed="' + (state.dogName.toLowerCase() === d.dogName.toLowerCase()) + '">' + esc(d.dogName) + '</button>').join('') +
       '<button type="button" class="chip" data-saved-dog="" aria-pressed="' + (!state.dogName) + '">A new dog</button></div>' : '';
+    const lv = lastVisit(state.dogName.trim());
+    const visits = history();
+    const lastCard = lv ? '<div class="last-visit"><div><span class="step-label">' + (state.dogName.trim() ? esc(state.dogName.trim()) + '\'s ' : '') + (daysFrom(lv.date) < 0 ? (state.dogName.trim() ? 'next visit' : 'Next visit') : (state.dogName.trim() ? 'last visit' : 'Last visit')) + '</span><p>' + visitLine(lv) + '</p>' +
+      (visits.length > 1 ? '<details class="visit-history"><summary>All visits from this device (' + visits.length + ')</summary><ul>' + visits.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(h => '<li><b>' + esc(h.dog) + '</b>: ' + visitLine(h) + '</li>').join('') + '</ul></details>' : '') +
+      '</div>' + (lv.service ? '<button type="button" class="btn btn-outline btn-sm" data-rebook="' + esc(lv.dog) + '">Book the same again</button>' : '') + '</div>' : '';
     $('[data-panel="dog"]').innerHTML =
-      '<p class="step-label">Step 1 of 6</p><h3>Tell us about your dog</h3>' + savedDogs +
+      '<p class="step-label">Step 1 of 6</p><h3>Tell us about your dog</h3>' + savedDogs + lastCard +
       '<div class="row-2">' +
       field('dogName', 'Dog\'s name', text('dogName', 'e.g. Bella')) +
       field('breed', 'Breed or mix', text('breed', 'e.g. Spaniel cross'), { optional: true }) +
@@ -139,7 +197,7 @@
       '</div>' +
       '<div class="field" data-field="slot"><label>Preferred time</label><div class="chips">' +
       D.timeSlots.map(s => '<button type="button" class="chip" data-chip="slot" data-value="' + s + '" aria-pressed="' + (state.slot === s) + '">' + s + '</button>').join('') +
-      '</div><div class="error">Pick a time of day</div></div>' +
+      '</div><p class="availability" data-availability></p><div class="error">Pick a time of day</div></div>' +
       '<p style="color:var(--muted);font-size:.9rem">' + (serviceObj() && serviceObj().duration ? 'A ' + esc(serviceObj().name.toLowerCase()) + ' usually takes ' + D.fmtDuration(serviceObj().duration) + '. ' : '') + 'Appointment times are reserved for ' + esc(dog()) + ', so please give 24 hours\' notice if plans change.</p>';
 
     $('[data-panel="about"]').innerHTML =
@@ -221,16 +279,28 @@
       '</div>' +
       '<details class="preview-wrap"><summary>Preview the message</summary><pre class="preview" id="msg-preview">' + esc(msg) + '</pre></details>' +
       '<p style="color:var(--muted);font-size:.9rem;margin-top:1rem">WhatsApp opens with the message filled in. Just press send and we will reply to confirm a time and quote.</p>';
+    function holdSlot() {
+      const key = state.date + '|' + state.slot;
+      if (!API || reservedKey === key) return Promise.resolve(true);
+      return reserve().then(res => {
+        if (res.ok) { reservedKey = key; taken.add(key); return true; }
+        if (res.reason === 'taken') { taken.add(key); D.toast('Sorry, that time was just booked. Please pick another.'); go(2); return false; }
+        D.toast('Could not reach the booking diary. Please still send your request and we will confirm the time.');
+        return true;
+      });
+    }
     $('#copy-msg').addEventListener('click', () => {
+      holdSlot();
       saveProfile();
       const done = () => D.toast('Message copied');
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(msg).then(done, () => fallbackCopy(msg, done));
       else fallbackCopy(msg, done);
     });
     $('#send-wa').addEventListener('click', e => {
+      holdSlot();            // runs in the background while WhatsApp opens
       saveProfile();
       D.confetti(e.clientX, e.clientY, 30);
-      D.toast('Opening WhatsApp... see you soon! 💜');
+      D.toast('Opening WhatsApp. See you soon!');
     });
   }
   function fallbackCopy(txt, cb) {
@@ -262,7 +332,16 @@
   function go(n) {
     step = Math.max(0, Math.min(STEPS.length - 1, n));
     if (step >= 1) { panels(); }      // re-render so the dog's name appears
-    if (step === STEPS.length - 1) renderSend();
+    if (STEPS[step].id === 'when' && API) loadTaken().then(paintSlots);
+    if (step === STEPS.length - 1) {
+      renderSend();
+      if (API) loadTaken(true).then(() => {
+        if (isTaken(state.date, state.slot) && reservedKey !== state.date + '|' + state.slot) {
+          D.toast('Sorry, that time was just booked. Please pick another.');
+          go(2);
+        }
+      });
+    }
     $$('.panel').forEach((p, i) => p.classList.toggle('active', i === step));
     $$('.step-dot').forEach((d, i) => { d.classList.toggle('active', i === step); d.classList.toggle('done', i < step); });
     const line = $('.line');
@@ -292,6 +371,7 @@
     if (id === 'when') {
       if (!state.date || state.date < todayISO()) bad('date');
       if (!state.slot) bad('slot');
+      else if (isTaken(state.date, state.slot)) bad('slot', 'That time is already booked. Please choose another.');
     }
     if (id === 'you') {
       if (!state.name.trim()) bad('name');
@@ -304,13 +384,14 @@
 
   function bind() {
     $$('[data-bind]').forEach(el => {
-      el.oninput = () => { state[el.dataset.bind] = el.value; save(); el.closest('.field').classList.remove('invalid'); };
+      el.oninput = () => { state[el.dataset.bind] = el.value; save(); el.closest('.field').classList.remove('invalid'); if (el.dataset.bind === 'date') paintSlots(); };
     });
     $$('[data-bind-check]').forEach(el => {
       el.onchange = () => { state[el.dataset.bindCheck] = el.checked; save(); el.closest('.field').classList.remove('invalid'); };
     });
     $$('[data-chip]').forEach(el => {
       el.onclick = () => {
+        if (el.disabled) return;
         state[el.dataset.chip] = el.dataset.value; save();
         $$('[data-chip="' + el.dataset.chip + '"]').forEach(c => c.setAttribute('aria-pressed', String(c === el)));
         el.closest('.field').classList.remove('invalid');
@@ -334,6 +415,15 @@
         D.toast(d ? d.dogName + '\'s details filled in' : 'Fresh form for a new dog');
       };
     });
+    const rebook = $('[data-rebook]');
+    if (rebook) rebook.onclick = () => {
+      const lv = lastVisit(rebook.dataset.rebook);
+      const d = profile && profile.dogs.find(x => x.dogName.toLowerCase() === rebook.dataset.rebook.toLowerCase());
+      if (d) applyDog(d);
+      if (lv && lv.service) state.service = lv.service;
+      save(); panels(); go(2);
+      D.toast('Same again for ' + rebook.dataset.rebook + '. Just pick a date.');
+    };
     const forget = $('[data-forget]');
     if (forget) forget.onclick = () => {
       forgetProfile();

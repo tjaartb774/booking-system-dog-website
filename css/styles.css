@@ -484,3 +484,16 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
 .time-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .8rem; border-radius: 999px; background: var(--cream); border: 1.5px solid var(--lavender-light); color: var(--muted); font-weight: 800; font-size: .78rem; margin: 0 0 .5rem .4rem; vertical-align: middle; }
 .time-pill .ico { width: 1em; height: 1em; color: var(--purple); }
 .service-pick .option .dur { color: var(--purple); font-weight: 800; }
+
+/* Booked-out time slots */
+.chip.taken, .chip:disabled { opacity: .45; cursor: not-allowed; text-decoration: line-through; background: var(--cream); }
+.chip.taken:hover { border-color: var(--lavender-light); }
+.availability { font-size: .85rem; color: var(--muted); margin: .5rem 0 0; min-height: 1.2em; }
+
+/* Last visit card */
+.last-visit { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; background: var(--white); border: 2px solid var(--lavender-light); border-radius: var(--radius-sm); padding: .9rem 1.1rem; margin-bottom: 1.2rem; }
+.last-visit p { margin: .2rem 0 0; font-weight: 700; }
+.last-visit .step-label { margin: 0; text-align: left; }
+.visit-history { margin-top: .5rem; font-size: .9rem; }
+.visit-history summary { cursor: pointer; color: var(--purple); font-weight: 800; }
+.visit-history ul { margin: .4rem 0 0; padding-left: 1.1rem; color: var(--muted); }

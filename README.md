@@ -16,6 +16,17 @@ A fun, interactive site for Beyond the Leash, a force-free dog grooming and trai
 
 The booking wizard collects the dog's details, service, preferred date, behaviour and health flags, the owner's details and agreement to the terms. It then opens WhatsApp (`https://wa.me/27769610712`) with the whole request prefilled, so you receive a tidy message and reply to confirm. There is also a copy button and an email fallback. Nothing is stored on a server.
 
+## Booking diary (stops a slot being booked twice)
+
+The form can check a shared booking diary so a time slot that has already been requested is greyed out for everyone else, and is reserved when a request is sent. The diary is a Google Sheet with a small script in front of it, so you can see and manage every booking in a spreadsheet.
+
+1. Create a Google Sheet and name its first tab `Bookings`.
+2. In the sheet choose Extensions, then Apps Script. Replace the sample code with the contents of `backend/google-apps-script.gs` and save.
+3. Deploy, New deployment, type Web app, execute as Me, access Anyone. Copy the web app URL.
+4. Paste that URL into `js/data.js` as `business.bookingApi`.
+
+Rows appear with status `Requested`. Change a row to `Confirmed` once agreed on WhatsApp, or `Cancelled` to free the slot. Bookings you type in by hand block the slot too. Until the URL is set, the form works as before and does not block slots.
+
 ## Things to update before going live
 
 1. **Facebook page URL** - `business.facebook` in `js/data.js` is a placeholder (`https://www.facebook.com/`).

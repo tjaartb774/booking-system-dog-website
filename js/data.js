@@ -20,7 +20,11 @@ window.BTL = {
     languages: 'English and Afrikaans',
     facebook: 'https://www.facebook.com/',          // PLACEHOLDER: paste the page URL
     facebookLabel: '100% recommend (10 reviews)',
-    tiktok: 'https://www.tiktok.com/@adoptionisaheartthing'
+    tiktok: 'https://www.tiktok.com/@adoptionisaheartthing',
+    /* Booking diary. Paste the Google Apps Script web app URL here (see
+       backend/google-apps-script.gs and the README). While this is empty the
+       booking form still works, but slots are not blocked for other people. */
+    bookingApi: ''
   },
 
   /* Grooming and training services. No prices on purpose: the policy says

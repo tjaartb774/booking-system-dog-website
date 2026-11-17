@@ -45,23 +45,29 @@
 </header>
 
 <main>
-  <section class="terms-hero">
+  <section class="shop-hero">
     <div class="container">
       <span class="script">Lead with Love</span>
       <h1>Shop</h1>
-      <p style="max-width:620px;margin:0 auto 1.2rem;color:var(--muted)">Meet the brands: South African treats, natural grooming care, walk gear, toys and beds we love. Choose a size where needed, add what you want and send your order on WhatsApp.</p>
-      <p class="shop-note" data-shop-note></p>
+      <p class="shop-intro">Treats, natural grooming care, walk gear, toys and beds from South African brands we love. Pick a size where needed, add to your basket and send the order on WhatsApp.</p>
+      <div class="filters">
+        <div class="filter-row"><span class="filter-label">Brand</span><div class="chips" id="brand-chips" role="tablist" aria-label="Brands"></div></div>
+        <div class="filter-row"><span class="filter-label">Type</span><div class="chips" id="cat-chips" role="tablist" aria-label="Types"></div></div>
+        <div class="filter-row"><label class="filter-label" for="sort">Sort</label><select id="sort" class="sort-select">
+          <option value="brand">By brand</option>
+          <option value="name">Name A to Z</option>
+          <option value="price-asc">Price, low to high</option>
+          <option value="price-desc">Price, high to low</option>
+        </select></div>
+      </div>
+      <div class="brand-intro" id="brand-intro"></div>
     </div>
   </section>
 
-  <section class="section" style="padding-top:0" id="shop">
+  <section class="section shop-grid-section" id="shop">
     <div class="container">
-      <p class="filter-label">Brand</p>
-      <div class="chips cat-chips" id="brand-chips" role="tablist" aria-label="Brands"></div>
-      <div class="brand-intro" id="brand-intro"></div>
-      <p class="filter-label">Type</p>
-      <div class="chips cat-chips" id="cat-chips" role="tablist" aria-label="Categories"></div>
       <div class="products-grid" id="products-grid"></div>
+      <p class="shop-note" data-shop-note style="text-align:center;margin-top:2rem"></p>
     </div>
   </section>
 </main>

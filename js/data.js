@@ -164,11 +164,6 @@ window.BTL = {
     categories: ["Treats", "Bath & care", "Walkies", "Toys", "Beds"],
     brands: [
           {
-                "name": "Brand",
-                "blurb": "What they sell",
-                "site": "https://Website"
-          },
-          {
                 "name": "Raw Love",
                 "blurb": "Raw, grain-free meals for dogs and cats, plus bones, biscuits and supplements.",
                 "site": "https://rawlovepets.co.za"

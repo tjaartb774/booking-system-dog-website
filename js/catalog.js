@@ -28,7 +28,9 @@
   $$('[data-shop-note]').forEach(e => { e.textContent = D.shop.note || ''; });
 
   /* ---------- Filters ---------- */
-  let brand = 'All', cat = 'All';
+  let brand = 'All', cat = 'All', sort = 'brand';
+  const brandOrder = (D.shop.brands || []).map(b => b.name);
+  const catOrder = D.shop.categories || [];
   const brandChips = $('#brand-chips'), catChips = $('#cat-chips');
   function chip(group, value, active) {
     return '<button type="button" class="chip" role="tab" aria-pressed="' + (value === active) + '" data-' + group + '="' + esc(value) + '">' + esc(value) + '</button>';
@@ -55,12 +57,21 @@
   }
   function renderGrid() {
     const list = D.products.filter(p => (brand === 'All' || p.brand === brand) && (cat === 'All' || p.category === cat));
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    if (sort === 'name') list.sort(byName);
+    else if (sort === 'price-asc') list.sort((a, b) => minPrice(a) - minPrice(b) || byName(a, b));
+    else if (sort === 'price-desc') list.sort((a, b) => minPrice(b) - minPrice(a) || byName(a, b));
+    else list.sort((a, b) => brandOrder.indexOf(a.brand) - brandOrder.indexOf(b.brand) || catOrder.indexOf(a.category) - catOrder.indexOf(b.category) || byName(a, b));
+    const grouped = sort === 'brand' && brand === 'All';
+    let lastBrand = null;
     const brandInfo = (D.shop.brands || []).find(b => b.name === brand);
     $('#brand-intro').innerHTML = brandInfo ? '<p>' + esc(brandInfo.blurb) + ' <a href="' + esc(brandInfo.site) + '" target="_blank" rel="noopener">Visit ' + esc(brandInfo.name) + '</a></p>' : '';
     grid.innerHTML = list.length ? list.map(p => {
       const multi = p.variants.length > 1;
       const sel = chosen[p.id];
-      return `
+      let head = '';
+      if (grouped && p.brand !== lastBrand) { lastBrand = p.brand; const b = (D.shop.brands || []).find(x => x.name === p.brand); head = '<div class="group-head"><h2>' + esc(p.brand) + '</h2>' + (b ? '<p>' + esc(b.blurb) + '</p>' : '') + '</div>'; }
+      return head + `
       <article class="card product" data-product="${esc(p.id)}">
         <div class="product-img">${tile(p)}</div>
         <span class="cat">${esc(p.brand)} · ${esc(p.category)}</span>
@@ -153,6 +164,12 @@
     if (count() === 0) { e.preventDefault(); if (D.toast) D.toast('Your basket is empty'); return; }
     if (D.toast) D.toast('Opening WhatsApp with your order');
   });
+
+  const sortSel = $('#sort');
+  if (sortSel) sortSel.addEventListener('change', () => { sort = sortSel.value; renderGrid(); });
+  // always open at the top of the shop, even when the browser remembers a scroll position
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
 
   renderChips();
   renderGrid();

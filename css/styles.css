@@ -472,3 +472,10 @@ details.preview-wrap summary { cursor: pointer; font-weight: 800; color: var(--p
 .group-head h2 { font-size: 1.25rem; margin: 0; }
 .group-head p { margin: 0; color: var(--muted); font-size: .9rem; }
 @media (max-width: 600px) { .filter-row { justify-content: flex-start; } .filter-row .filter-label { text-align: left; min-width: 0; width: 100%; } }
+
+/* Shop search and results line */
+.search-input { width: min(100%, 360px); padding: .45rem 1rem; border-radius: 999px; border: 2px solid var(--lavender-light); background: var(--white); font-weight: 600; min-height: 36px; }
+.search-input:focus { outline: none; border-color: var(--purple); }
+.results-line { display: flex; justify-content: center; align-items: center; gap: .6rem; flex-wrap: wrap; margin: .9rem 0 0; font-size: .85rem; color: var(--muted); font-weight: 700; }
+.results-line .btn-sm { min-height: 32px; padding: .3rem .8rem; font-size: .85rem; }
+.results-line .btn[hidden] { display: none; }

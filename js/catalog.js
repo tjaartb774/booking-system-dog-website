@@ -28,10 +28,16 @@
   $$('[data-shop-note]').forEach(e => { e.textContent = D.shop.note || ''; });
 
   /* ---------- Filters ---------- */
-  let brand = 'All', cat = 'All', sort = 'brand';
+  let brand = 'All', cat = 'All', sort = 'brand', price = 'All', query = '';
+  const PRICE_BANDS = [
+    { label: 'All', test: () => true },
+    { label: 'Under R100', test: p => minPrice(p) < 100 },
+    { label: 'R100 to R300', test: p => minPrice(p) >= 100 && minPrice(p) <= 300 },
+    { label: 'Over R300', test: p => minPrice(p) > 300 }
+  ];
   const brandOrder = (D.shop.brands || []).map(b => b.name);
   const catOrder = D.shop.categories || [];
-  const brandChips = $('#brand-chips'), catChips = $('#cat-chips');
+  const brandChips = $('#brand-chips'), catChips = $('#cat-chips'), priceChips = $('#price-chips');
   function chip(group, value, active) {
     return '<button type="button" class="chip" role="tab" aria-pressed="' + (value === active) + '" data-' + group + '="' + esc(value) + '">' + esc(value) + '</button>';
   }
@@ -40,6 +46,18 @@
     catChips.innerHTML = chip('cat', 'All', cat) + (D.shop.categories || []).map(c => chip('cat', c, cat)).join('');
     $$('[data-brand]', brandChips).forEach(b => b.addEventListener('click', () => { brand = b.dataset.brand; renderChips(); renderGrid(); }));
     $$('[data-cat]', catChips).forEach(b => b.addEventListener('click', () => { cat = b.dataset.cat; renderChips(); renderGrid(); }));
+    priceChips.innerHTML = PRICE_BANDS.map(b => chip('price', b.label, price)).join('');
+    $$('[data-price]', priceChips).forEach(b => b.addEventListener('click', () => { price = b.dataset.price; renderChips(); renderGrid(); }));
+  }
+  function matches(p) {
+    if (brand !== 'All' && p.brand !== brand) return false;
+    if (cat !== 'All' && p.category !== cat) return false;
+    if (!PRICE_BANDS.find(b => b.label === price).test(p)) return false;
+    if (query) {
+      const hay = (p.name + ' ' + p.brand + ' ' + p.category + ' ' + (p.blurb || '') + ' ' + p.variants.map(v => v.label).join(' ')).toLowerCase();
+      if (!query.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
   }
 
   /* ---------- Product grid ---------- */
@@ -56,7 +74,10 @@
     return minPrice(p) === maxPrice(p) ? money(minPrice(p)) : 'From ' + money(minPrice(p));
   }
   function renderGrid() {
-    const list = D.products.filter(p => (brand === 'All' || p.brand === brand) && (cat === 'All' || p.category === cat));
+    const list = D.products.filter(matches);
+    const active = brand !== 'All' || cat !== 'All' || price !== 'All' || query;
+    $('#results-count').textContent = list.length === D.products.length ? 'Showing all ' + list.length + ' products' : 'Showing ' + list.length + ' of ' + D.products.length + ' products';
+    $('#clear-filters').hidden = !active;
     const byName = (a, b) => a.name.localeCompare(b.name);
     if (sort === 'name') list.sort(byName);
     else if (sort === 'price-asc') list.sort((a, b) => minPrice(a) - minPrice(b) || byName(a, b));
@@ -82,7 +103,7 @@
           <b class="price" data-price="${esc(p.id)}">${priceLabel(p, sel)}</b>
           <button type="button" class="btn btn-primary btn-sm" data-add="${esc(p.id)}">Add to basket</button>
         </div>
-      </article>`; }).join('') : '<p class="empty">Nothing in this group yet.</p>';
+      </article>`; }).join('') : '<p class="empty">Nothing matches those filters. Try clearing one.</p>';
     wireFallbacks(grid);
     $$('[data-variant]', grid).forEach(s => s.addEventListener('change', () => {
       chosen[s.dataset.variant] = s.value || undefined;
@@ -165,6 +186,10 @@
     if (D.toast) D.toast('Opening WhatsApp with your order');
   });
 
+  const searchBox = $('#search');
+  let searchTimer;
+  searchBox.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { query = searchBox.value.trim().toLowerCase(); renderGrid(); }, 120); });
+  $('#clear-filters').addEventListener('click', () => { brand = 'All'; cat = 'All'; price = 'All'; query = ''; searchBox.value = ''; renderChips(); renderGrid(); });
   const sortSel = $('#sort');
   if (sortSel) sortSel.addEventListener('change', () => { sort = sortSel.value; renderGrid(); });
   // always open at the top of the shop, even when the browser remembers a scroll position

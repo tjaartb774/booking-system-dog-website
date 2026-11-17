@@ -53,6 +53,8 @@
       <div class="filters">
         <div class="filter-row"><span class="filter-label">Brand</span><div class="chips" id="brand-chips" role="tablist" aria-label="Brands"></div></div>
         <div class="filter-row"><span class="filter-label">Type</span><div class="chips" id="cat-chips" role="tablist" aria-label="Types"></div></div>
+        <div class="filter-row"><span class="filter-label">Price</span><div class="chips" id="price-chips" role="tablist" aria-label="Price range"></div></div>
+        <div class="filter-row filter-search"><label class="filter-label" for="search">Search</label><input type="search" id="search" class="search-input" placeholder="e.g. collar, venison, shampoo" autocomplete="off"></div>
         <div class="filter-row"><label class="filter-label" for="sort">Sort</label><select id="sort" class="sort-select">
           <option value="brand">By brand</option>
           <option value="name">Name A to Z</option>
@@ -61,6 +63,7 @@
         </select></div>
       </div>
       <div class="brand-intro" id="brand-intro"></div>
+      <p class="results-line"><span id="results-count"></span> <button type="button" class="btn btn-ghost btn-sm" id="clear-filters" hidden>Clear filters</button></p>
     </div>
   </section>
 
